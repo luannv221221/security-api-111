@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     private UserDetailService userDetailService;
@@ -31,6 +33,8 @@ public class SecurityConfig {
                 csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth->{
+//                    auth.requestMatchers("/api/v1/admin/auth").hasAnyAuthority("ADMIN","SUB_ADMIN");
+//                    auth.requestMatchers("/api/v1/admin/auth/add").hasAuthority("ADMIN");
                     auth.requestMatchers("/api/v1/admin").hasAuthority("ADMIN");
                     auth.requestMatchers("/api/v1/cart").authenticated();
                     auth.anyRequest().permitAll();
